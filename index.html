@@ -338,116 +338,21 @@
   </footer>
 
   <script>
-    // 1) Cambia este correo por el destino real del equipo
-    const TO_EMAIL = "tu-correo@ejemplo.com";
+  document.getElementById("contactForm").addEventListener("submit", function(e) {
 
-    // Menú responsive
-    const menuBtn = document.getElementById("menuBtn");
-    const nav = document.getElementById("mainNav");
-    menuBtn.addEventListener("click", () => {
-      const open = nav.classList.toggle("open");
-      menuBtn.setAttribute("aria-expanded", open ? "true" : "false");
-    });
-
-    // Formulario
-    const form = document.getElementById("contactForm");
-    const btnSend = document.getElementById("btnSend");
-    const btnClear = document.getElementById("btnClear");
-
-    const statusOk = document.getElementById("statusOk");
-    const statusBad = document.getElementById("statusBad");
-
-    const fields = {
-      name: document.getElementById("name"),
-      email: document.getElementById("email"),
-      subject: document.getElementById("subject"),
-      message: document.getElementById("message"),
-    };
-
-    const errors = {
-      name: document.getElementById("errName"),
-      email: document.getElementById("errEmail"),
-      subject: document.getElementById("errSubject"),
-      message: document.getElementById("errMessage"),
-    };
-
-    function show(el){ el.style.display = "block"; }
-    function hide(el){ el.style.display = "none"; }
-    function isValidEmail(email){
-      return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim());
-    }
-
-    function validate(){
-      let ok = true;
-
-      const nameVal = fields.name.value.trim();
-      const emailVal = fields.email.value.trim();
-      const subjectVal = fields.subject.value.trim();
-      const msgVal = fields.message.value.trim();
-
-      if (nameVal.length < 2) { show(errors.name); ok = false; } else hide(errors.name);
-      if (!isValidEmail(emailVal)) { show(errors.email); ok = false; } else hide(errors.email);
-      if (subjectVal.length < 3) { show(errors.subject); ok = false; } else hide(errors.subject);
-      if (msgVal.length < 10) { show(errors.message); ok = false; } else hide(errors.message);
-
-      return ok;
-    }
-
-    function resetStatus(){
-      hide(statusOk);
-      hide(statusBad);
-    }
-
-    Object.values(fields).forEach(input => {
-      input.addEventListener("input", () => {
-        validate();
-        resetStatus();
-      });
-    });
-
-    form.addEventListener("submit", (e) => {
+    if (
+      document.getElementById("name").value === "" ||
+      document.getElementById("email").value === "" ||
+      document.getElementById("subject").value === "" ||
+      document.getElementById("message").value === ""
+    ) {
       e.preventDefault();
-      resetStatus();
+      alert("Rellena todos los campos.");
+    }
 
-      if (!validate()){
-        show(statusBad);
-        return;
-      }
+  });
+</script>
 
-      btnSend.disabled = true;
-      btnSend.textContent = "Preparando...";
-
-      const name = fields.name.value.trim();
-      const email = fields.email.value.trim();
-      const subject = fields.subject.value.trim();
-
-      const body =
-`Nombre: ${name}
-Email: ${email}
-
-Mensaje:
-${fields.message.value.trim()}
-
----
-Enviado desde la página de contacto de AIROS`;
-
-      const mailto = `mailto:${encodeURIComponent(TO_EMAIL)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-
-      // Abre el cliente de correo
-      window.location.href = mailto;
-
-      show(statusOk);
-      form.reset();
-
-      btnSend.disabled = false;
-      btnSend.textContent = "Enviar";
-    });
-
-    btnClear.addEventListener("click", () => {
-      form.reset();
-      Object.values(errors).forEach(hide);
-      resetStatus();
-    });
-  </script>
 </body>
 </html>
+
